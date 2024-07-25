@@ -1,64 +1,67 @@
-// CRUD functions 处理数据逻辑
 import Foundation
 import SwiftUI
 
-//定义一个类，它遵循Observerable object协议
+// Define a class that conforms to ObservableObject protocol
 class MainViewModel: ObservableObject {
-    // 使用Published属性包装起，将items数组声明成可观察的
-    @Published var items : [MilestoneModel] = []
-    //初始化方法，在对象创建时调用
-    init (){
-        getItems()
-        //调用getItems方法获取初始数据
+    @Published var showConfirmationAlert: Bool = false
+    @Published var items: [MilestoneModel] = []
+    
+    // Track the item to be deleted
+    @Published var itemToDelete: MilestoneModel? = nil
+
+    // Request confirmation for deletion
+    func requestDeleteConfirmation(for item: MilestoneModel) {
+        self.itemToDelete = item
+        self.showConfirmationAlert = true
     }
     
-    //获取初始数据
+    // Initialize method, called when the object is created
+    init() {
+        getItems()
+    }
+    
+    // Fetch initial data
     func getItems() {
-        //创建一个新的MilestoneModel数组，包含两个初始实例
-        
+        // Create a new MilestoneModel array with initial instances
         let newItems: [MilestoneModel] = []
         items.append(contentsOf: newItems)
-
     }
     
-    //添加新Milestone
+    // Add a new Milestone
     func addMilestone(
-        title:String,
-        targetDate:Date,
-        displayFormat:String = "",
-        backgroundColor: Color)
-    {
-        //创建一个新的MilestoneModel实例
+        title: String,
+        targetDate: Date,
+        displayFormat: String = "",
+        backgroundColor: Color
+    ) {
+        // Create a new MilestoneModel instance
         let newMilestone = MilestoneModel(
-            title:title,
+            title: title,
             targetDate: targetDate,
-            displayFormat:displayFormat,
+            displayFormat: displayFormat,
             backgroundColor: backgroundColor
         )
-        //将新创建的里程碑添加到items数组中
+        // Add the new milestone to the items array
         items.append(newMilestone)
-        
     }
     
-    //删除和更新都可以通过index或id来写，但通过 id 来进行更新和删除操作是一种更常见和标准的方法，尤其是在需要频繁对数组进行操作的情况下。
-    
-    //删除里程碑
-    func deleteMilestone(at index:Int){
-        //检查索引是否在items数组的范围内
-        guard items.indices.contains(index) else{return}
-        //从items数组中删除指定索引处的里程碑
+    // Delete milestone by index
+    func deleteMilestone(at index: Int) {
+        guard items.indices.contains(index) else { return }
         items.remove(at: index)
     }
     
+    // Delete milestone by ID
     func deleteMilestonebyId(by id: UUID) {
-           items.removeAll { $0.id == id }
-       }
+        items.removeAll { $0.id == id }
+        itemToDelete = nil // Reset the item to delete
+        showConfirmationAlert = false
+    }
     
-    //更新里程碑
+    // Update milestone
     func updateMilestone(with newMilestone: MilestoneModel) {
-            if let index = items.firstIndex(where: { $0.id == newMilestone.id }) {
-                items[index] = newMilestone
-            }
+        if let index = items.firstIndex(where: { $0.id == newMilestone.id }) {
+            items[index] = newMilestone
         }
-
+    }
 }

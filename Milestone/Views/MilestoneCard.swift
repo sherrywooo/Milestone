@@ -5,14 +5,15 @@ struct MilestoneCard: View {
     @ObservedObject var viewModel: MainViewModel
     @State private var showOptions = false
     @State private var navigateToEdit = false
+    @State private var showDeleteConfirmation = false // Added state for deletion confirmation
+    @State private var itemToDelete: MilestoneModel? // Added state to hold the item to delete
+
     // Stylings
-        let titleFont = Font.custom("Barlow-SemiBold", size: 32)
-        let dateFont = Font.custom("Barlow-Medium", size: 24)
-        let durationFont = Font.custom("Barlow-Regular", size: 16)
-    
+    let titleFont = Font.custom("Barlow-SemiBold", size: 32)
+    let dateFont = Font.custom("Barlow-Medium", size: 24)
+    let durationFont = Font.custom("Barlow-Regular", size: 16)
+
     var body: some View {
-        //let refColor = milestone.backgroundColor.brightness(1.6)
-       
         ZStack {
             VStack {
                 VStack(alignment: .leading, spacing: 5) {
@@ -20,40 +21,35 @@ struct MilestoneCard: View {
                         .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText(for: milestone.backgroundColor))
                         .font(durationFont)
                         .padding(.top, 16)
-                    
+
                     Text("\(milestone.targetDate, formatter: itemFormatter)")
                         .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText(for: milestone.backgroundColor))
                         .font(dateFont)
                         .padding(.bottom, 5)
+
                     // Thick divider
                     Rectangle()
-                            .fill(AppStyles.AppColor.customDivider(for: milestone.backgroundColor)) // Fill color
-                            .frame(width: 40, height: 6) // Height of the divider
-                            .padding(.horizontal, 0) // Horizontal padding
-                            .padding(.vertical, 6) // Vertical padding
-                    
+                        .fill(AppStyles.AppColor.customDivider(for: milestone.backgroundColor)) // Fill color
+                        .frame(width: 40, height: 6) // Height of the divider
+                        .padding(.horizontal, 0) // Horizontal padding
+                        .padding(.vertical, 6) // Vertical padding
+
                     Text(milestone.title)
                         .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText(for: milestone.backgroundColor))
                         .font(titleFont)
                         .multilineTextAlignment(.leading)
                         .lineLimit(nil)
                         .fixedSize(horizontal: false, vertical: true)
-                        .padding(.top,20)
+                        .padding(.top, 20)
                 }
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                
+
                 Spacer()
-                
-                
-                //Text("\(milestone.timeUntil.1)")
-                  //  .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText)
-                  //  .font(durationFont)
-                DurationStackView(timeCount: milestone.timeUntil.1, refColor:milestone.backgroundColor)
+
+                DurationStackView(timeCount: milestone.timeUntil.1, refColor: milestone.backgroundColor)
                 Spacer()
-                // Display DurationStackView here
             }
-            
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(milestone.backgroundColor)
@@ -64,7 +60,7 @@ struct MilestoneCard: View {
                     showOptions.toggle()
                 }
             }
-            
+
             if showOptions {
                 VStack {
                     HStack {
@@ -74,17 +70,18 @@ struct MilestoneCard: View {
                                 .font(AppStyles.TextStyles.actionicon)
                                 .foregroundColor(.white)
                         }
-                            
+
                         Menu {
                             Button(action: {
-                                                        navigateToEdit = true // Set navigateToEdit to true to trigger navigation
-                                                        showOptions.toggle() // Close the options menu after tapping "Edit"
-                                                    }) {
-                                                        Label("Edit", systemImage: "pencil")
-                                                    }
+                                navigateToEdit = true // Set navigateToEdit to true to trigger navigation
+                                showOptions.toggle() // Close the options menu after tapping "Edit"
+                            }) {
+                                Label("Edit", systemImage: "pencil")
+                            }
 
                             Button(action: {
-                                viewModel.deleteMilestonebyId(by: milestone.id)
+                                itemToDelete = milestone
+                                showDeleteConfirmation = true
                             }) {
                                 Label("Delete", systemImage: "trash")
                             }
@@ -95,7 +92,6 @@ struct MilestoneCard: View {
                                 .foregroundColor(.white)
                         }
                         .menuStyle(BorderlessButtonMenuStyle())
-                       
                     }
                     Spacer()
                 }
@@ -104,12 +100,25 @@ struct MilestoneCard: View {
             }
         }
         .background(
-                    NavigationLink(destination: EditMilestone(milestone: $milestone, viewModel: viewModel), isActive: $navigateToEdit) {
-                        EmptyView()
+            NavigationLink(destination: EditMilestone(milestone: $milestone, viewModel: viewModel), isActive: $navigateToEdit) {
+                EmptyView()
+            }
+            .hidden()
+        )
+        .alert(isPresented: $showDeleteConfirmation) {
+            Alert(
+                title: Text("Confirm Deletion"),
+                message: Text("Are you sure you want to delete this milestone?"),
+                primaryButton: .destructive(Text("Delete")) {
+                    if let item = itemToDelete {
+                        viewModel.deleteMilestonebyId(by: item.id)
                     }
-                    .hidden()
-                )
-        
+                },
+                secondaryButton: .cancel {
+                    itemToDelete = nil
+                }
+            )
+        }
     }
 
     private var itemFormatter: DateFormatter {
@@ -122,11 +131,10 @@ struct MilestoneCard: View {
 struct MilestoneCard_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = MainViewModel()
-        let milestone = MilestoneModel(title: "2025 stockholm maration", targetDate: Date(), backgroundColor: .blue)
+        let milestone = MilestoneModel(title: "2025 Stockholm Marathon", targetDate: Date(), backgroundColor: .blue)
         viewModel.items.append(milestone) // Add a sample milestone to viewModel.items
         
         return MilestoneCard(milestone: .constant(milestone), viewModel: viewModel)
             .previewLayout(.fixed(width: 300, height: 200)) // Adjust size as needed
     }
 }
-

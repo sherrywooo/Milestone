@@ -40,20 +40,36 @@ struct MilestoneList: View {
                     }
                     .swipeActions {
                         Button("Delete") {
-                            if let index = viewModel.items.firstIndex(where: { $0.id == milestone.id }) {
-                                viewModel.deleteMilestone(at: index)
-                            }
+                            viewModel.requestDeleteConfirmation(for: milestone)
                         }
                         .tint(.red)
                     }
                 }
                 .onDelete { indexSet in
                     for index in indexSet {
-                        viewModel.deleteMilestone(at: index)
+                        let milestone = viewModel.items[index]
+                        viewModel.requestDeleteConfirmation(for: milestone)
                     }
                 }
             }
             .listStyle(PlainListStyle())
+        }
+        .alert(isPresented: $viewModel.showConfirmationAlert) {
+            Alert(
+                title: Text("Confirm Deletion"),
+                message: Text("Are you sure you want to delete this milestone?"),
+                primaryButton: .destructive(Text("Delete")) {
+                    if let item = viewModel.itemToDelete {
+                        // Find the index of the item to delete
+                        if let index = viewModel.items.firstIndex(where: { $0.id == item.id }) {
+                            viewModel.deleteMilestone(at: index)
+                        }
+                    }
+                },
+                secondaryButton: .cancel {
+                    viewModel.itemToDelete = nil
+                }
+            )
         }
     }
 }
