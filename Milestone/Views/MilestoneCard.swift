@@ -17,23 +17,23 @@ struct MilestoneCard: View {
             VStack {
                 VStack(alignment: .leading, spacing: 5) {
                     Text("\(milestone.timeUntil.0)")
-                        .foregroundColor(Color.white)
+                        .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText(for: milestone.backgroundColor))
                         .font(durationFont)
                         .padding(.top, 16)
                     
                     Text("\(milestone.targetDate, formatter: itemFormatter)")
-                        .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText)
+                        .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText(for: milestone.backgroundColor))
                         .font(dateFont)
                         .padding(.bottom, 5)
                     // Thick divider
                     Rectangle()
-                            .fill(Color(hex: "EBC12C")) // Fill color
+                            .fill(AppStyles.AppColor.customDivider(for: milestone.backgroundColor)) // Fill color
                             .frame(width: 40, height: 6) // Height of the divider
                             .padding(.horizontal, 0) // Horizontal padding
                             .padding(.vertical, 6) // Vertical padding
                     
                     Text(milestone.title)
-                        .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText)
+                        .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText(for: milestone.backgroundColor))
                         .font(titleFont)
                         .multilineTextAlignment(.leading)
                         .lineLimit(nil)
@@ -49,7 +49,7 @@ struct MilestoneCard: View {
                 //Text("\(milestone.timeUntil.1)")
                   //  .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText)
                   //  .font(durationFont)
-                DurationStackView(timeCount: milestone.timeUntil.1)
+                DurationStackView(timeCount: milestone.timeUntil.1, refColor:milestone.backgroundColor)
                 Spacer()
                 // Display DurationStackView here
             }

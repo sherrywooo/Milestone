@@ -28,6 +28,49 @@ struct AppStyles {
         static let selectedTabItem = Color(hex: "0D0E0C")
         static let unselectedTabItem = Color(hex: "737373")
         
+        static let mBlack = Color(hex: "0D0E0C")
+        static let mRed = Color(hex: "C33642")
+        static let mPink = Color(hex: "DD6670")
+        static let mBlue = Color(hex: "4889AF")
+        static let mYellow = Color(hex: "EBC12C")
+        static let mPurple = Color(hex: "735BF2")
+        static let mOrange = Color(hex: "E3832B")
+        static let mGreen = Color(hex: "00B383")
+        
+        // Define the color based on a condition
+        static func milestoneCardPrimaryText(for backgroundColor: Color) -> Color {
+            // Check if the background color is darkColor or lightColor
+            if (backgroundColor == mYellow) {
+                return Color.black // White text for dark backgrounds
+            } else {
+                return Color.white // Black text for light backgrounds
+            }
+        }
+        static func customDivider(for backgroundColor: Color) -> Color {
+            // Check if the background color is darkColor or lightColor
+            if (backgroundColor == mYellow) {
+                return Color.black // White text for dark backgrounds
+            } else {
+                return mYellow // Black text for light backgrounds
+            }
+        }
+        static func durationStackBg(for backgroundColor: Color) -> Color {
+            // Check if the background color is darkColor or lightColor
+            if (backgroundColor == mBlack) {
+                return Color.white // White text for dark backgrounds
+            } else {
+                return Color.black // Black text for light backgrounds
+            }
+        }
+        static func durationStackText (for backgroundColor: Color) -> Color {
+            // Check if the background color is darkColor or lightColor
+            if (backgroundColor == mBlack) {
+                return Color.black // White text for dark backgrounds
+            } else {
+                return Color.white// Black text for light backgrounds
+            }
+        }
+        
         // Retaining the existing color definitions for compatibility
         static let primary = primaryButtonBackground
         static let secondary = secondaryTitle

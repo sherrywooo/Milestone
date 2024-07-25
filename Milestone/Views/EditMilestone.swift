@@ -1,19 +1,17 @@
-//
-//  EditMilestone.swift
-//  Milestone
-//
-//  Created by Sherry Wu on 2024-07-07.
-//
 import SwiftUI
 import Foundation
 
 struct EditMilestone: View {
-    //需要 @Binding 和 @ObservedObject，以便绑定现有的 MilestoneModel 实例进行编辑，同时能够调用视图模型中的方法进行更新。
     @Binding var milestone: MilestoneModel
     @ObservedObject var viewModel: MainViewModel
     @Environment(\.presentationMode) var presentationMode
     
     let formatOptions = ["Years-Months-Days", "Years-Months", "Months-Days", "Days"]
+    
+    // Convert Color to ColorOption
+    private var selectedColorOption: ColorOption? {
+        colorOptions.first { $0.color == milestone.backgroundColor }
+    }
     
     var body: some View {
         Form {
@@ -25,7 +23,6 @@ struct EditMilestone: View {
                 DatePicker("Target Date", selection: $milestone.targetDate, displayedComponents: .date)
             }
             
-        
             Section(header: Text("Display Format")) {
                 Picker("Display Format", selection: $milestone.displayFormat) {
                     ForEach(formatOptions, id: \.self) { option in
@@ -37,14 +34,32 @@ struct EditMilestone: View {
                 .labelsHidden()
                 .clipped()
             }
-
             
             Section(header: Text("Background Color")) {
-                ColorPicker("Background Color", selection: $milestone.backgroundColor)
+                Picker("Select Color", selection: Binding(
+                    get: { selectedColorOption ?? colorOptions.first! },
+                    set: { newColorOption in
+                        if let newColor = newColorOption?.color {
+                            milestone.backgroundColor = newColor
+                        }
+                    }
+                )) {
+                    ForEach(colorOptions) { option in
+                        HStack {
+                            Rectangle()
+                                .fill(option.color)
+                                .frame(width: 30, height: 30)
+                                .overlay(Rectangle().stroke(Color.black, lineWidth: 1))
+                            Text(option.name)
+                        }
+                        .tag(option as ColorOption?)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
             }
         }
        
-        .safeAreaInset(edge: VerticalEdge.bottom) {
+        .safeAreaInset(edge: .bottom) {
             PrimaryButton(title: "Save") {
                 viewModel.updateMilestone(with: milestone)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -55,7 +70,21 @@ struct EditMilestone: View {
         }
             
         .navigationBarTitle("Edit Milestone", displayMode: .inline)
-   
+    }
+}
 
+struct EditMilestone_Previews: PreviewProvider {
+    static var previews: some View {
+        EditMilestone(
+            milestone: .constant(
+                MilestoneModel(
+                    title: "Sample Milestone",
+                    targetDate: Date(),
+                    displayFormat: "Years-Months-Days",
+                    backgroundColor: .blue
+                )
+            ),
+            viewModel: MainViewModel()
+        )
     }
 }
