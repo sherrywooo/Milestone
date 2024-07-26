@@ -12,7 +12,7 @@ struct HomeView: View {
                                 .fontWeight(.bold)
                                 .foregroundColor(.black)
                                 //.padding([.top, .bottom], 20)
-                                .padding( .bottom, 30)
+                                .padding( .bottom, 20)
              
                    
                     NavigationLink(destination: AddMilestone(viewModel: viewModel), isActive: $isShowingAddMilestone) {
@@ -23,7 +23,7 @@ struct HomeView: View {
                     PrimaryButton(title: "Add Milestone") {
                             isShowingAddMilestone = true // 点击按钮时，设置isShowingAddMilestone为true，触发导航链接
                     }
-                    .padding(.bottom, 20) // 可以根据需要调整按钮的位置和间距
+                    .padding(.bottom, 20)// 可以根据需要调整按钮的位置和间距
                     
                     Divider()
                     
@@ -46,6 +46,7 @@ struct HomeView: View {
                     }
                     .tabViewStyle(PageTabViewStyle())
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                    
                 }
             }
     }

@@ -9,6 +9,7 @@ struct ColorOption: Identifiable, Hashable {
 
 // Sample color options
 let colorOptions: [ColorOption] = [
+    ColorOption(color:AppStyles.AppColor.mWhite,name:"White"),
     ColorOption(color: AppStyles.AppColor.mBlack, name: "Black"),
     ColorOption(color: AppStyles.AppColor.mRed, name: "Red"),
     ColorOption(color: AppStyles.AppColor.mPink, name: "Pink"),
@@ -35,6 +36,12 @@ struct AddMilestone: View {
                 Form {
                     Section(header: Text("Title")) {
                         TextField("Milestone title", text: $title)
+                        .onChange(of: title) { newValue in
+                                                    // Limit the text length to 30 characters
+                                                    if newValue.count > 30 {
+                                                        title = String(newValue.prefix(72))
+                                                    }
+                                                }
                     }
                     
                     Section(header: Text("Target Date")) {

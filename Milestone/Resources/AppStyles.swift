@@ -1,13 +1,20 @@
 import SwiftUI
 
 struct AppStyles {
+
+    
     struct TextStyles {
         static let pageTitle = Font.custom("Barlow", size: 24)
         static let headline = Font.custom("Barlow", size: 20)
         static let regular = Font.system(size: 16)
         static let actionicon = Font.system(size:24)
         static let buttonTitle = Font.custom("Barlow", size: 18)
+        
+        static let titleFont = Font.custom("Barlow-SemiBold", size: 38)
+        static let dateFont = Font.custom("Barlow-Medium", size: 32)
+        static let durationFont = Font.custom("Barlow-Regular", size: 20)
         static let countNumber = Font.custom("Barlow", size: 42)
+        static let countUnit = Font.custom("Barlow-Regular", size: 20)
     }
 
     struct AppColor {
@@ -27,7 +34,9 @@ struct AppStyles {
         
         static let selectedTabItem = Color(hex: "0D0E0C")
         static let unselectedTabItem = Color(hex: "737373")
+        static let tabdivider = Color (hex: "DADADA")
         
+        static let mWhite = Color(hex:"FFFFFF")
         static let mBlack = Color(hex: "0D0E0C")
         static let mRed = Color(hex: "C33642")
         static let mPink = Color(hex: "DD6670")
@@ -42,10 +51,38 @@ struct AppStyles {
             // Check if the background color is darkColor or lightColor
             if (backgroundColor == mYellow) {
                 return Color.black // White text for dark backgrounds
+            } 
+            if (backgroundColor == mWhite){
+                return Color.black // White text for dark backgrounds
             } else {
                 return Color.white // Black text for light backgrounds
             }
         }
+        
+        static func milestoneCardSecondaryColor(for backgroundColor: Color) -> Color {
+               // Switch case to return different colors based on the background color
+               switch backgroundColor {
+               case mBlack:
+                   return Color(hex: "AFAFAF") // Light gray
+               case mRed:
+                   return Color(hex: "FFD4D7") // Light pink
+               case mPink:
+                   return Color(hex: "7A2F35") // Dark red
+               case mBlue:
+                   return Color(hex: "8FC6E6") // Light blue
+               case mYellow:
+                   return Color(hex: "735E14") // Dark yellow
+               case mPurple:
+                   return Color(hex: "C3BAF3") // Light purple
+               case mOrange:
+                   return Color(hex: "995414") // Dark orange
+               case mGreen:
+                   return Color(hex: "005840") // Dark green
+               default:
+                   return Color.gray // Default color
+               }
+           }
+        
         static func customDivider(for backgroundColor: Color) -> Color {
             // Check if the background color is darkColor or lightColor
             if (backgroundColor == mYellow) {
@@ -70,6 +107,15 @@ struct AppStyles {
                 return Color.white// Black text for light backgrounds
             }
         }
+  
+        static func bulletColor(for tabSelection: TabSelection) -> Color {
+                   switch tabSelection {
+                   case .future:
+                       return mYellow
+                   case .past:
+                       return mBlack
+                   }
+               }
         
         // Retaining the existing color definitions for compatibility
         static let primary = primaryButtonBackground

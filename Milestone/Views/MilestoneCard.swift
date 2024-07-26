@@ -8,24 +8,19 @@ struct MilestoneCard: View {
     @State private var showDeleteConfirmation = false // Added state for deletion confirmation
     @State private var itemToDelete: MilestoneModel? // Added state to hold the item to delete
 
-    // Stylings
-    let titleFont = Font.custom("Barlow-SemiBold", size: 32)
-    let dateFont = Font.custom("Barlow-Medium", size: 24)
-    let durationFont = Font.custom("Barlow-Regular", size: 16)
-
+    
     var body: some View {
         ZStack {
             VStack {
                 VStack(alignment: .leading, spacing: 5) {
-                    Text("\(milestone.timeUntil.0)")
-                        .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText(for: milestone.backgroundColor))
-                        .font(durationFont)
-                        .padding(.top, 16)
-
                     Text("\(milestone.targetDate, formatter: itemFormatter)")
                         .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText(for: milestone.backgroundColor))
-                        .font(dateFont)
+                        .font(AppStyles.TextStyles.dateFont)
                         .padding(.bottom, 5)
+                    
+                    Text("\(milestone.timeUntil.0)")
+                        .foregroundColor(AppStyles.AppColor.milestoneCardSecondaryColor(for: milestone.backgroundColor))
+                        .font(AppStyles.TextStyles.durationFont)
 
                     // Thick divider
                     Rectangle()
@@ -36,7 +31,7 @@ struct MilestoneCard: View {
 
                     Text(milestone.title)
                         .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText(for: milestone.backgroundColor))
-                        .font(titleFont)
+                        .font(AppStyles.TextStyles.titleFont)
                         .multilineTextAlignment(.leading)
                         .lineLimit(nil)
                         .fixedSize(horizontal: false, vertical: true)
@@ -48,9 +43,10 @@ struct MilestoneCard: View {
                 Spacer()
 
                 DurationStackView(timeCount: milestone.timeUntil.1, refColor: milestone.backgroundColor)
+                    
                 Spacer()
             }
-            .padding()
+            .padding(.top, 80)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(milestone.backgroundColor)
             .padding(.horizontal)
@@ -68,7 +64,7 @@ struct MilestoneCard: View {
                         NavigationLink(destination: AddMilestone(viewModel: viewModel)) {
                             Label("", systemImage: "plus")
                                 .font(AppStyles.TextStyles.actionicon)
-                                .foregroundColor(.white)
+                                .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText(for: milestone.backgroundColor))
                         }
 
                         Menu {
@@ -89,7 +85,7 @@ struct MilestoneCard: View {
                             Image(systemName: "ellipsis")
                                 .padding()
                                 .font(AppStyles.TextStyles.actionicon)
-                                .foregroundColor(.white)
+                                .foregroundColor(AppStyles.AppColor.milestoneCardPrimaryText(for: milestone.backgroundColor))
                         }
                         .menuStyle(BorderlessButtonMenuStyle())
                     }

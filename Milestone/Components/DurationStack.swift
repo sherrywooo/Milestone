@@ -26,8 +26,8 @@ struct DurationStackView: View {
                         .frame(maxWidth: .infinity)
                     
                     Text(component.unit)
-                        .foregroundColor(AppStyles.AppColor.durationStackBg(for: refColor))
-                        .font(Font.custom("Barlow-Regular", size: 16))
+                        .foregroundColor(AppStyles.AppColor.milestoneCardSecondaryColor(for: refColor))
+                        .font(AppStyles.TextStyles.countUnit)
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
             }
