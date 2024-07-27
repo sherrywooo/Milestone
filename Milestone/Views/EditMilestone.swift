@@ -15,15 +15,18 @@ struct EditMilestone: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Title")) {
+            Section(header: Text("Title")
+                .font(AppStyles.TextStyles.formLabel)) {
                 TextField("Title", text: $milestone.title)
             }
             
-            Section(header: Text("Target Date")) {
+            Section(header: Text("Target Date")
+                .font(AppStyles.TextStyles.formLabel)) {
                 DatePicker("Target Date", selection: $milestone.targetDate, displayedComponents: .date)
             }
             
-            Section(header: Text("Display Format")) {
+            Section(header: Text("Display Format")
+                .font(AppStyles.TextStyles.formLabel)) {
                 Picker("Display Format", selection: $milestone.displayFormat) {
                     ForEach(formatOptions, id: \.self) { option in
                         Text(option)
@@ -35,7 +38,8 @@ struct EditMilestone: View {
                 .clipped()
             }
             
-            Section(header: Text("Background Color")) {
+            Section(header: Text("Background Color")
+                .font(AppStyles.TextStyles.formLabel)) {
                 Picker("Select Color", selection: Binding(
                     get: { selectedColorOption ?? colorOptions.first! },
                     set: { newColorOption in

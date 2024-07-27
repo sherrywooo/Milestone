@@ -9,18 +9,22 @@ struct AppStyles {
         static let regular = Font.system(size: 16)
         static let actionicon = Font.system(size:24)
         static let buttonTitle = Font.custom("Barlow", size: 18)
+        static let formLabel = Font.custom("Barlow-medium", size: 16)
+        static let tabLabel = Font.custom("Barlow-medium", size: 24)
+       
         
         static let titleFont = Font.custom("Barlow-SemiBold", size: 38)
         static let dateFont = Font.custom("Barlow-Medium", size: 32)
         static let durationFont = Font.custom("Barlow-Regular", size: 20)
         static let countNumber = Font.custom("Barlow", size: 42)
         static let countUnit = Font.custom("Barlow-Regular", size: 20)
+        
     }
 
     struct AppColor {
         static let primaryTitle = Color(hex: "0D0E0C")
         static let secondaryTitle = Color(hex: "949494")
-        
+        static let formBg = Color(hex: "F3F3F3")
         static let primaryButtonBackground = Color(hex: "EBC12C")
         static let primaryButtonText = Color(hex: "0D0E0C")
         

@@ -45,10 +45,13 @@ struct MilestoneList: View {
             } else {
                 // Show the Picker if there are milestones
                 Picker("Select Tab", selection: $selectedTab) {
-                    Text("Future").tag(TabSelection.future)
-                    Text("Past").tag(TabSelection.past)
+                    Text("Future")
+                        .tag(TabSelection.future)
+                    Text("Past")
+                        .tag(TabSelection.past)
                 }
                 .pickerStyle(SegmentedPickerStyle())
+                .font(AppStyles.TextStyles.tabLabel)
                 .padding()
 
                 // Check if filtered list is empty based on the selected tab
