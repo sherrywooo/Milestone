@@ -11,13 +11,13 @@ struct ColorOption: Identifiable, Hashable {
 let colorOptions: [ColorOption] = [
     ColorOption(color:AppStyles.AppColor.mWhite,name:"White"),
     ColorOption(color: AppStyles.AppColor.mBlack, name: "Black"),
-    ColorOption(color: AppStyles.AppColor.mYellow, name: "Yellow"),
     ColorOption(color: AppStyles.AppColor.mRed, name: "Red"),
     ColorOption(color: AppStyles.AppColor.mPink, name: "Pink"),
-    ColorOption(color: AppStyles.AppColor.mOrange, name: "Orange"),
-    ColorOption(color: AppStyles.AppColor.mGreen, name: "Green"),
     ColorOption(color: AppStyles.AppColor.mBlue, name: "Blue"),
-    ColorOption(color: AppStyles.AppColor.mPurple, name: "Purple")
+    ColorOption(color: AppStyles.AppColor.mYellow, name: "Yellow"),
+    ColorOption(color: AppStyles.AppColor.mPurple, name: "Purple"),
+    ColorOption(color: AppStyles.AppColor.mOrange, name: "Orange"),
+    ColorOption(color: AppStyles.AppColor.mGreen, name: "Green")
 ]
 
 struct AddMilestone: View {
@@ -34,10 +34,7 @@ struct AddMilestone: View {
     var body: some View {
             VStack {
                 Form {
-                    Section(header: Text("Title")
-                        .font(AppStyles.TextStyles.formLabel)
-                        .frame(width: 100, alignment: .leading)
-                    ){
+                    Section(header: Text("Title")) {
                         TextField("Milestone title", text: $title)
                         .onChange(of: title) { newValue in
                                                     // Limit the text length to 30 characters
@@ -47,13 +44,11 @@ struct AddMilestone: View {
                                                 }
                     }
                     
-                    Section(header: Text("Target Date")
-                        .font(AppStyles.TextStyles.formLabel)) {
+                    Section(header: Text("Target Date")) {
                         DatePicker("Select", selection: $targetDate, displayedComponents: .date)
                     }
                     
-                    Section(header: Text("Display Format")
-                        .font(AppStyles.TextStyles.formLabel)) {
+                    Section(header: Text("Display Format")) {
                         Picker("Select", selection: $selectedFormat) {
                             ForEach(formatOptions, id: \.self) {
                                 Text($0)
@@ -63,8 +58,7 @@ struct AddMilestone: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     
-                    Section(header: Text("Background Color")
-                        .font(AppStyles.TextStyles.formLabel)) {
+                    Section(header: Text("Background Color")) {
                         Picker("Select Color", selection: $selectedColorOption) {
                             ForEach(colorOptions) { option in
                                 HStack {
